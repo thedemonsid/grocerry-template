@@ -9,7 +9,7 @@ export class AppService {
   }
   async testDB(): Promise<boolean> {
     try {
-      await this.prisma.client.user.findFirst();
+      await this.prisma.client.category.findFirst();
       return true;
     } catch (e) {
       console.error('DB Test Failed:', e);

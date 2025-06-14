@@ -13,10 +13,34 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  imageUrls   String[]
+  // stock       Int      @default(0)
+  isActive    Boolean  @default(true) //* Control visibility
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@index([categoryId, name])
+  @@index([name])
+  @@index([isActive, price])
+  @@map("products")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique //* Ensure unique category names
+  slug        String    @unique
+  description String?
+  imageUrl    String? //* Category image for UI
+  isActive    Boolean   @default(true)
+  products    Product[]
+
+  @@map("categories")
 }
